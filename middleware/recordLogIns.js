@@ -6,4 +6,4 @@ const recordLogIns = async(message, req, user) =>{
     user.logIns.push(logItem);
     await user.save();
 };
-module.exports = {recordLogIns};
+module.exports = recordLogIns;
