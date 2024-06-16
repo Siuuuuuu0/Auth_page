@@ -34,3 +34,5 @@ GET	undefined	/logout		c4591e25-647a-42cc-b80b-fd2cd1bc1470	20240616	21:37:47
 GET	undefined	/logout		a5fc7351-e3da-47bf-bbc2-52a361ba9ae7	20240616	21:38:33
 POST	undefined	/auth		278ee9d3-44a4-4a8d-b1e0-7036cd877303	20240616	21:39:01
 GET	undefined	/logout		8cf80a0a-129f-47ef-9527-0f4c5f7f45f4	20240616	21:39:05
+POST	undefined	/auth		820abd79-c775-4e32-ab18-7fa83e79bc2b	20240616	21:45:16
+POST	undefined	/auth		f94cc3dc-6f24-45c6-b9e4-d5a80083f4e3	20240616	21:45:37
