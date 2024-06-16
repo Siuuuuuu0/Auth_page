@@ -21,6 +21,10 @@ const userSchema = new Schema({
         Editor : Number, 
         Admin : Number
     },
+    logIns : {
+        type : Array,
+        default :[]
+    },
     refreshToken : String
 }); 
 module.exports = mongoose.model("User", userSchema); 

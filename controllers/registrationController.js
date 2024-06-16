@@ -1,5 +1,6 @@
 const User = require('../model/User'); 
 const bcrypt = require('bcrypt');
+const recordLogIns = require('../middleware/recordLogIns');
 const handleRegistration = async(req, res) => {
     const {password, email, username } = req.body; 
     if(!password||!email) return res.status(400).json({'message' : 'password and email required'});
@@ -19,7 +20,8 @@ const handleRegistration = async(req, res) => {
             'username' : username?username:email //if username exists then username, else the email
         });
         console.log(result);
-        res.status(201).json({'message' : `User ${username} has been created`});
+        await recordLogIns("First log in from ", req, result);
+        return res.status(201).json({'message' : `User ${username} has been created`});
     }
     catch(err){
         return res.status(500).json({'message' : err.message}); 
