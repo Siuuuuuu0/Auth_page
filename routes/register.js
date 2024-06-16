@@ -1,4 +1,4 @@
 const router = require('express').Router(); 
-const registrationController = require('../controllers/registrationController'); 
-router.post('/', registrationController.handleRegistration); 
+const handleRegistration = require('../controllers/registrationController'); 
+router.post('/', handleRegistration); 
 module.exports = router; 

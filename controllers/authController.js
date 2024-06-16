@@ -34,4 +34,4 @@ const handleAuth = async(req, res)=>{
         return res.sendStatus(401);
     }
 };
-module.exports = {handleAuth};
+module.exports = handleAuth;
