@@ -1,53 +1,64 @@
 require('dotenv').config();
+const express = require('express');
+const app = express(); 
 const verifyJWT = require('./middleware/verifyJWT'); 
-const {logger} = require('./middleware/logEvents'); 
+const { logger } = require('./middleware/logEvents'); 
 const errorHandler = require('./middleware/errorHandler'); 
-const credentials = require('./middleware/credentials'); 
+const credentials = require('./config/credentials'); // Fixed import path
 const corsOptions = require('./config/corsOptions'); 
 const connectToDB = require('./config/dbConnection'); 
 const cookieParser = require('cookie-parser'); 
 const path = require('path'); 
-const cors = require('cors'); 
-const express = require('express'); 
-const app = express(); 
+const cors = require('cors');  
 const mongoose = require('mongoose'); 
 
-const PORT = process.env.PORT||3500;
+const PORT = process.env.PORT || 3500;
 
+// Connect to DB
 connectToDB(); 
 
+// Middleware
 app.use(logger); 
 app.use(credentials);
 app.use(cors(corsOptions)); 
-app.use(express.urlencoded({extended : false}));
+app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); 
-app.use(cookieParser);
+app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
+
+// Routes
 app.use('/auth', require('./routes/auth')); 
 app.use('/logout', require('./routes/logout')); 
 app.use('/register', require('./routes/register')); 
 app.use('/refresh', require('./routes/refresh')); 
-app.use(verifyJWT); 
-// app.use('/', require('./routes/root')); //after auth
-//user.js here
+app.use('/', require('./routes/root')); 
 
-app.all('./*', (req, res)=>{
+// Protected routes
+app.use(verifyJWT); 
+//root protected
+// app.use('/protected', require('./routes/protected')); // Example protected route
+
+// 404 Handler
+app.all('/*', (req, res) => {
     res.status(404); 
-    if(req.accepts('html')){
-        res.sendFile(paht.join(__dirname, 'views', '404.html')); 
-    }
-    else if(req.accepts('json')){
-        res.json({error : '404 not found'});
-    }
-    else{
+    if (req.accepts('html')) {
+        res.sendFile(path.join(__dirname, 'views', '404.html')); 
+    } else if (req.accepts('json')) {
+        res.json({ error: '404 not found' });
+    } else {
         res.type('txt').send('404 not found'); 
     }
 });
+
+// Error Handler
 app.use(errorHandler); 
-mongoose.connection.once('open', ()=>{
-    console.log('Connected to Mongo'); 
-    app.listen(PORT, ()=>console.log(`Running on port ${PORT}`));
-})
+
+// Start Server
+mongoose.connection.once('open', () => {
+    console.log('Connected to MongoDB'); 
+    app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+});
+
 // 200 OK
 // Meaning: The request has succeeded. The meaning of success depends on the HTTP method (GET: resource retrieved, POST: resource created).
 // 2. 201 Created

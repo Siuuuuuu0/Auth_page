@@ -4,7 +4,7 @@ const jwt = require('jsonwebtoken');
 const recordLogIns = require('../middleware/recordLogIns');
 const handleAuth = async(req, res)=>{
     const {userOrMail, password} = req.body; 
-    const regex = "/[a-za-A0-9]+$/";
+    const regex = /[a-zA-Z0-9]+$/;
     const isUsername = regex.test(userOrMail);
     const foundUser = await User.findOne(isUsername?{username : userOrMail}:{email : userOrMail}).exec();
     if(!foundUser) return res.status(404).json({'message' : 'no such user'});
@@ -27,7 +27,8 @@ const handleAuth = async(req, res)=>{
         foundUser.refreshToken = refreshToken;
         await foundUser.save();
         await recordLogIns("New log in from ", req, foundUser);
-        res.cookie('jwt', refreshToken, {httpOnly : true, secure :true, sameSite : "None", maxAge : 1000*60*60*24});
+        res.cookie('jwt', refreshToken, {httpOnly : true, sameSite : "None", maxAge : 1000*60*60*24});
+        // res.cookie('jwt', refreshToken, {httpOnly : true, secure :true, sameSite : "None", maxAge : 1000*60*60*24});
         return res.json({accessToken});
     }
     else{

@@ -9,7 +9,7 @@ const handleRegistration = async(req, res) => {
     if(username) {
         const duplicateUsername = await User.findOne({username}).exec();
         if(duplicateUsername) return res.status(409).json({'message' : 'this username already exists'});
-        const regex = '/[a-zA-Z0-9]+$/';
+        const regex = /[a-zA-Z0-9]+$/;
         if(!regex.test(username)) return res.status(409).json({'message' : 'The Username cant contain special chars'}); 
     }
     try{
