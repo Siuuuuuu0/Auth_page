@@ -27,16 +27,16 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
 
 // Routes
+//2FA with google authentificator(like tutorial) or gmail
 app.use('/auth', require('./routes/auth')); 
 app.use('/logout', require('./routes/logout')); 
 app.use('/register', require('./routes/register')); 
-app.use('/refresh', require('./routes/refresh')); 
-app.use('/', require('./routes/root')); 
+app.use('/refresh', require('./routes/refresh'));  
 
 // Protected routes
 app.use(verifyJWT); 
-//root protected
-// app.use('/protected', require('./routes/protected')); // Example protected route
+// app.use('/users', require('./routes/api/users')); //will crash with no code in there
+// app.use('/', require('./routes/root'));
 
 // 404 Handler
 app.all('/*', (req, res) => {
