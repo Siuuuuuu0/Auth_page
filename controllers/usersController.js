@@ -12,12 +12,12 @@ const updateUser = async(req, res)=>{
     const foundUser = await User.findOne({_id : req.body.id}).exec();
     const {email, password, username} = req.body.toUpdate;
     if(email) {
-        if(await User.findOne({email}).exec()) return res.status(403).json({'message' : 'email alreday in use'}); 
+        // if(await User.findOne({email}).exec()) return res.status(403).json({'message' : 'email alreday in use'}); 
         foundUser.email= email; //2FA
     }
     if(password) foundUser.password = await bcrypt.hash(password, 10); //2FA
     if(username) {
-        if(await User.findOne({username}).exec()) return res.status(403).json({'message' : 'username alreday in use'});
+        // if(await User.findOne({username}).exec()) return res.status(403).json({'message' : 'username alreday in use'});
         foundUser.username = username; 
     }
     const result = await foundUser.save();
@@ -33,8 +33,8 @@ const getUsers =async(req, res)=>{
 };
 const createUser = async(req, res)=>{
     if(!req?.body?.email||!req.body.password) return res.status(400).json({'message' : 'password and email required'});
-    if(await User.findOne({email: req.body.email}).exec()) return res.status(403).json({'message' : 'this email already exists'});
-    if(req.body.username&&await User.findOne({username : req.body.username}).exec()) return res.status(403).json({'message' : 'this username already exists'});
+    // if(await User.findOne({email: req.body.email}).exec()) return res.status(403).json({'message' : 'this email already exists'});
+    // if(req.body.username&&await User.findOne({username : req.body.username}).exec()) return res.status(403).json({'message' : 'this username already exists'});
     try{
         const newUser = await User.create({
             email : req.body.email, 

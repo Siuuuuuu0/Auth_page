@@ -1,12 +1,14 @@
 const router = require('express').Router(); 
+const getId = require('../../middleware/getId');
 const roles = require('../../config/roles');
 const verifyRoles = require('../../middleware/verifyRoles'); 
+const alreadyExists = require('../../middleware/userOrMailExists');
 const {deleteUser, updateUser, getUsers, createUser, getUser} = require('../../controllers/usersController');
 router.route('/')
     .get(getUsers)
-    .post(verifyRoles(roles.Admin), createUser)
-    .put(verifyRoles(roles.Admin), updateUser)
-    .delete(verifyRoles(roles.Admin), deleteUser)
+    .post(verifyRoles(roles.Admin), alreadyExists, createUser)
+    .put(verifyRoles(roles.Admin), getId, alreadyExists, updateUser)
+    .delete(verifyRoles(roles.Admin), getId, deleteUser)
 router.route('/:id')
     .get(getUser)
 module.exports = router; 

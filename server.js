@@ -25,10 +25,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
-//middleware for converting email or username to id
 //middleware for 2FA
 //mail confirmation
-//middleware for checking if the email or username already exist unless its the same he has
 
 // Routes
 //2FA with google authentificator(like tutorial) or gmail
@@ -39,7 +37,7 @@ app.use('/refresh', require('./routes/refresh'));
 
 // Protected routes
 app.use(verifyJWT); 
-app.use('/users', require('./routes/api/users')); //will crash with no code in there
+app.use('/users', require('./routes/api/users')); 
 app.use('/', require('./routes/root'));
 
 // 404 Handler

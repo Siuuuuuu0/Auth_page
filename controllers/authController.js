@@ -13,14 +13,17 @@ const handleAuth = async(req, res)=>{
         const roles = Object.values(foundUser.roles);
         const accessToken = jwt.sign(
             {"Info" : {
-                "email" : foundUser.email, 
-                "roles" : roles
+                "email" : foundUser.email, //included in the req directly as req.email and req.roles
+                "roles" : roles,
+                "username" : foundUser.username
             }}, 
             process.env.ACCESS_TOKEN_SECRET, 
             {expiresIn : '30s'}
         );
         const refreshToken = jwt.sign(
-            {"email" :foundUser.email}, 
+            {
+                "email" :foundUser.email
+            }, 
             process.env.REFRESH_TOKEN_SECRET, 
             {expiresIn : "1d"}
         );
