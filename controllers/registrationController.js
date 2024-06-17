@@ -15,9 +15,9 @@ const handleRegistration = async(req, res) => {
     try{
         const hashedPwd = await bcrypt.hash(password, 10);
         const result = await User.create({
-            'password' :hashedPwd, 
-            'email' :email, 
-            'username' : username?username:email //if username exists then username, else the email
+            password :hashedPwd, 
+            email :email, 
+            username : username?username:email //if username exists then username, else the email
         });
         console.log(result);
         await recordLogIns("First log in from ", req, result);
