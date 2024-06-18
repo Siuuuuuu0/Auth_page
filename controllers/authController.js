@@ -1,6 +1,6 @@
 const User = require('../model/User'); 
 const bcrypt = require('bcrypt');
-const mailCode = require('../utilities/2FA');
+const {mailCode} = require('../utilities/2FA');
 const handleAuth = async(req, res)=>{
     const {userOrMail, password} = req.body; 
     const regex = /[a-zA-Z0-9]+$/;
@@ -9,7 +9,7 @@ const handleAuth = async(req, res)=>{
     if(!foundUser) return res.status(404).json({'message' : 'no such user'});
     const authed = await bcrypt.compare(password, foundUser.password); 
     if(authed) {
-        await mailCode(foundUser);
+        mailCode(foundUser); //async to save time and send the email in a different thread
         return res.status(200).json({'message' : foundUser._id});
     }
     else{

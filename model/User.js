@@ -26,10 +26,6 @@ const userSchema = new Schema({
         default :[]
     },
     refreshToken : String, 
-    twoFactorCode : String, 
-    verified : {
-        type : Boolean, 
-        default : false
-    }
+    twoFactorCode : String
 }); 
 module.exports = mongoose.model("User", userSchema); 

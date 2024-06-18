@@ -1,5 +1,5 @@
 const nodemailer = require ('nodemailer');
-const mailOptions = (email, code) => {
+const mailOptionsCode = (email, code) => {
     return {
     from : {
         name : "Auth page",
@@ -10,6 +10,19 @@ const mailOptions = (email, code) => {
     text : `Your verification code is ${code}`
     };
 };
+
+const mailOptionsConfirm = (email, url)=>{
+    return  {
+        from : {
+            name : "Auth page",
+            adress : process.env.EMAIL
+        }, 
+        to : email,
+        subject : 'Confirm your email', 
+        text : url
+    };
+};
+
 const transporter = nodemailer.createTransport({
     service : 'gmail', 
     host :'smtp.gmail.com',
@@ -19,5 +32,5 @@ const transporter = nodemailer.createTransport({
         'user' : process.env.EMAIL, 
         'pass' : process.env.PASSWORD 
     }
-})
-module.exports = {mailOptions, transporter} ;
+});
+module.exports = {mailOptionsCode, mailOptionsConfirm, transporter} ;

@@ -104,3 +104,12 @@ POST	undefined	/verify		9e73c8dc-da66-4172-8419-91f848a50e0c	20240618	17:17:20
 POST	undefined	/auth		b091218d-7142-4ef8-a5f6-a574c2310cd9	20240618	17:17:25
 POST	undefined	/verify		2823b688-e252-49f9-a3b4-3f7c7290f662	20240618	17:17:48
 GET	undefined	/users		bc9f7508-9dcb-4c22-9134-1ce7904cf4d0	20240618	17:18:04
+POST	undefined	/auth		6761c274-f61a-4b69-bdbe-b2d676dfa72d	20240618	17:39:01
+POST	undefined	/verify		1aebfd72-9b87-46bb-8e56-e6be9a32082e	20240618	17:39:47
+POST	undefined	/register		aa537429-fb15-4230-8f27-3f2ad34a701d	20240618	18:46:22
+POST	undefined	/register/confirm-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhhaGgzNjc3NkBnbWFpbC5jb20iLCJpYXQiOjE3MTg3MjkxODIsImV4cCI6MTcxODcyOTc4Mn0.in6H2TXCIpAMF3ZAYQEjuLqTYzQQUszP9XyfzGIg3ww		2dada1a7-b305-4126-8f9a-949ddb4c5201	20240618	18:49:14
+POST	undefined	/register/confirm-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhhaGgzNjc3NkBnbWFpbC5jb20iLCJpYXQiOjE3MTg3MjkxODIsImV4cCI6MTcxODcyOTc4Mn0.in6H2TXCIpAMF3ZAYQEjuLqTYzQQUszP9XyfzGIg3ww		829bf932-dc65-451f-a904-857596638c4e	20240618	18:53:30
+POST	undefined	/register/confirm-email?token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImhhaGgzNjc3NkBnbWFpbC5jb20iLCJpYXQiOjE3MTg3MjkxODIsImV4cCI6MTcxODcyOTc4Mn0.in6H2TXCIpAMF3ZAYQEjuLqTYzQQUszP9XyfzGIg3ww		a873b815-6d2f-4b7c-af93-3153b8d6e06d	20240618	18:54:27
+POST	undefined	/auth		f3d63f8f-abf8-479c-af73-e0fecc990abd	20240618	18:56:21
+POST	undefined	/verify		e207ade2-128e-42cb-9c17-55e37accbb45	20240618	18:57:06
+GET	undefined	/users		35e42cfa-99ce-46fe-8567-3e7a2fa396e0	20240618	18:57:19
