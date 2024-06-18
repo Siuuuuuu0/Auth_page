@@ -1,6 +1,6 @@
 const User = require('../model/User'); 
 const bcrypt = require('bcrypt');
-const recordLogIns = require('../middleware/recordLogIns');
+const recordLogIns = require('../utilities/recordLogIns');
 const handleRegistration = async(req, res) => {
     const {password, email, username } = req.body; 
     if(!password||!email) return res.status(400).json({'message' : 'password and email required'});

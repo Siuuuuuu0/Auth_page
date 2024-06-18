@@ -13,7 +13,6 @@ const cors = require('cors');
 const mongoose = require('mongoose'); 
 
 const PORT = process.env.PORT || 3500;
-
 // Connect to DB
 connectToDB(); 
 
@@ -25,8 +24,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
-//middleware for 2FA
-//mail confirmation
+// 2FA middleware 
+// confirm route with a confirmation email
 
 // Routes
 //2FA with google authentificator(like tutorial) or gmail
@@ -34,7 +33,7 @@ app.use('/auth', require('./routes/auth'));
 app.use('/logout', require('./routes/logout')); 
 app.use('/register', require('./routes/register')); 
 app.use('/refresh', require('./routes/refresh'));  
-
+app.use('/verify', require('./routes/verify'));
 // Protected routes
 app.use(verifyJWT); 
 app.use('/users', require('./routes/api/users')); 
