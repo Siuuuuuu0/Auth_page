@@ -7,6 +7,7 @@ const errorHandler = require('./middleware/errorHandler');
 const credentials = require('./config/credentials'); // Fixed import path
 const corsOptions = require('./config/corsOptions'); 
 const connectToDB = require('./config/dbConnection'); 
+const {loginLimiter, emailLimiter} = require('./config/rateLimiter');
 const cookieParser = require('cookie-parser'); 
 const path = require('path'); 
 const cors = require('cors');  
@@ -24,16 +25,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
-// 2FA middleware 
-// confirm route with a confirmation email
 
 // Routes
-//2FA with google authentificator(like tutorial) or gmail
-app.use('/auth', require('./routes/auth')); 
+app.use('/auth', loginLimiter, require('./routes/auth')); 
 app.use('/logout', require('./routes/logout')); 
 app.use('/register', require('./routes/register')); 
 app.use('/refresh', require('./routes/refresh'));  
-app.use('/verify', require('./routes/verify'));
+app.use('/verify', emailLimiter, require('./routes/verify'));
+
 // Protected routes
 app.use(verifyJWT); 
 app.use('/users', require('./routes/api/users')); 

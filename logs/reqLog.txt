@@ -113,3 +113,4 @@ POST	undefined	/register/confirm-email		a873b815-6d2f-4b7c-af93-3153b8d6e06d	202
 POST	undefined	/auth		f3d63f8f-abf8-479c-af73-e0fecc990abd	20240618	18:56:21
 POST	undefined	/verify		e207ade2-128e-42cb-9c17-55e37accbb45	20240618	18:57:06
 GET	undefined	/users		35e42cfa-99ce-46fe-8567-3e7a2fa396e0	20240618	18:57:19
+GET	undefined	/refresh		1a20360b-90ac-476c-927f-55dc625cd038	20240618	19:20:00
