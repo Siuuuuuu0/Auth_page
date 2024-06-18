@@ -27,7 +27,10 @@ const userSchema = new Schema({
     },
     refreshToken : String, 
     twoFactorCode : String, 
-    failedAttempts : Number, 
+    failedAttempts : {
+        type : Number, 
+        default :0 
+    },
     lockedUntil : Date
 }); 
 module.exports = mongoose.model("User", userSchema); 

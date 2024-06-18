@@ -1,6 +1,7 @@
 const User = require('../model/User');
 const jwt = require('jsonwebtoken');
 const recordLogIns = require('../utilities/recordLogIns');
+const {ATTEMPT_LIMIT, LOCK_DURATION} = require('../config/rateLimiter');
 const handleVerification = async(req, res)=> {
     if(!req?.body?.code||!req.body.id) return res.status(400).json({'message' : 'no code provided'});
     const foundUser = await User.findOne({_id : req.body.id}).exec(); 
@@ -28,11 +29,20 @@ const handleVerification = async(req, res)=> {
         );
         foundUser.refreshToken = refreshToken;
         await foundUser.save();
-        await recordLogIns("New log in from ", req, foundUser);
+        recordLogIns("New log in from ", req, foundUser); //no need for sync work
         res.cookie('jwt', refreshToken, {httpOnly : true, sameSite : "None", maxAge : 1000*60*60*24});
         // res.cookie('jwt', refreshToken, {httpOnly : true, secure :true, sameSite : "None", maxAge : 1000*60*60*24});
         return res.json({accessToken});
     }
-    else return res.status(401).json({'message' : 'wrong code'});
+    else {
+        foundUser.failedAttempts ++;
+        if(foundUser.failedAttempts === ATTEMPT_LIMIT) {
+            foundUser.lockedUntil = Date.now() + LOCK_DURATION;
+            //send an email saying account is locked
+            foundUser.failedAttempts = 0;
+        }
+        await foundUser.save();
+        return res.status(401).json({'message' : 'wrong code'});
+    }
 }; 
 module.exports = handleVerification; 

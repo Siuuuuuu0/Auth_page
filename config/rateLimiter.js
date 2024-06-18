@@ -1,5 +1,6 @@
 const limiter = require('express-rate-limit');
-
+const ATTEMPT_LIMIT = 5; 
+const LOCK_DURATION = 1000*60*60*3;
 const loginLimiter = limiter({
     windowMs : 1000 *60 *60 *3, //3 hours
     max : 5, 
@@ -12,4 +13,4 @@ const emailLimiter = limiter({
     message : "Too many requests"
 });
 
-module.exports = {loginLimiter, emailLimiter};
+module.exports = {loginLimiter, emailLimiter, ATTEMPT_LIMIT, LOCK_DURATION};
