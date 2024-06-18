@@ -1,2 +1,0 @@
-res.senStatus is not a function	f8475afa-a0cd-4ed2-90ed-d189caf12590	20240616	23:07:36
-ENOENT: no such file or directory, stat 'C:\Users\vadim\OneDrive\Документы\Coding\MERN_Stack\Auth_Page\views\404.html'	632eae39-1b81-4d85-8b9a-632789eeefb4	20240617	16:44:22
