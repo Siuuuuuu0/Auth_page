@@ -36,6 +36,7 @@ app.use('/logout', require('./routes/logout'));
 app.use('/register', require('./routes/register')); 
 app.use('/refresh', require('./routes/refresh'));  
 app.use('/verify', emailLimiter, require('./routes/verify'));
+app.use('/reset', require('./routes/reset'));
 
 // Protected routes
 app.use(verifyJWT); 
