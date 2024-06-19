@@ -45,6 +45,7 @@ const updatePassword = async(req, res)=>{
     if(!foundUser||!foundUser.newPassword) return res.status(404).json({'message' : 'no such user'}); 
     foundUser.password = foundUser.newPassword;
     foundUser.newPassword = undefined;
+    foundUser.refreshToken = '';
     await foundUser.save();
     return res.status(200).json({'message' : 'password changed'});
 };

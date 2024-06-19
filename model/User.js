@@ -40,6 +40,7 @@ const userSchema = new Schema({
         type : Date, 
         default : undefined
     }, 
-    lastLocation : String
+    lastLocation : String, 
+    googleId : String
 }); 
 module.exports = mongoose.model("User", userSchema); 
