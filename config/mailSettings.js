@@ -23,6 +23,18 @@ const mailOptionsConfirm = (email, url)=>{
     };
 };
 
+const failedLoginAttempt = (email, ip)=>{
+    return {
+        from : {
+            name : "Auth Page",
+            adress : process.env.EMAIL
+        },
+        to : email, 
+        subject : 'Failed login attempt', 
+        text : `Your account has been accessed from IP ${ip} but the 2FA failed, if it wasn't you, please change your password immediately`
+    };
+};
+
 const transporter = nodemailer.createTransport({
     service : 'gmail', 
     host :'smtp.gmail.com',
@@ -33,4 +45,4 @@ const transporter = nodemailer.createTransport({
         'pass' : process.env.PASSWORD 
     }
 });
-module.exports = {mailOptionsCode, mailOptionsConfirm, transporter} ;
+module.exports = {mailOptionsCode, mailOptionsConfirm, failedLoginAttempt, transporter} ;

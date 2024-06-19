@@ -13,15 +13,18 @@ const handleConfirmation = async(req, res)=>{
     try{
         const hashedPwd = await bcrypt.hash(password, 10);
         const result = await User.create({
-            password :hashedPwd, 
-            email :email, 
-            username : username?username:email //if username exists then username, else the email
+        password :hashedPwd, 
+        email :email, 
+        username : username?username:email //if username exists then username, else the email
         });
         console.log(result);
         await recordLogIns("First log in from ", req, result);
         return res.status(201).json({'message' : `User ${result} has been created`});
+        
     }
     catch(err){
+        if(err.code===11000) 
+            return res.status(403).json({'message' : 'username or email taken in the meantime'});
         return res.status(500).json({'message' : err.message}); 
     }
 }

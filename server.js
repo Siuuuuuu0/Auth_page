@@ -39,6 +39,7 @@ app.use('/verify', emailLimiter, require('./routes/verify'));
 
 // Protected routes
 app.use(verifyJWT); 
+app.use('/update', require('./routes/update'));
 app.use('/users', require('./routes/api/users')); 
 app.use('/', require('./routes/root'));
 

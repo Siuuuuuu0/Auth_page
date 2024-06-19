@@ -5,7 +5,7 @@ const handleRegistration = async(req, res) => {
     const {email} = req.body; 
     const duplicateEmail = await User.findOne({email}).exec();
     if(duplicateEmail) return res.status(409).json({'message' : 'this email is already registered'})
-    confirmMail(req.body.email);
+    confirmMail(req.body.email, '/register/confirm-email');
     res.status(200).json({'message' : 'confirmation email sent'});
 };
 module.exports = handleRegistration;
