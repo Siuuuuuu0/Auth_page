@@ -9,7 +9,7 @@ const handleAuth = async(req, res)=>{
     if(!foundUser) return res.status(404).json({'message' : 'no such user'});
     const lockedUntil = foundUser.lockedUntil;
     if(lockedUntil && lockedUntil > Date.now()) return res.status(403)
-        .json({'message' : `Account blocked until ${Math.ceil((foundUser.lockedUntil - Date.now()) / 1000)}`});
+        .json({'message' : `Account blocked for ${Math.ceil((foundUser.lockedUntil - Date.now()) / 1000)} seconds`});
     else if (lockedUntil) {
         foundUser.lockedUntil = undefined; 
         await foundUser.save();

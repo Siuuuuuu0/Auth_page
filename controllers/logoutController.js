@@ -10,6 +10,12 @@ const handleLogout = async(req, res)=>{
         return res.sendStatus(403); 
     }
     else{
+        req.session.destroy((err)=>{
+            if(err) console.error(err); 
+            else{
+                res.clearCookie('connect.sid');
+            }
+        });
         res.clearCookie('jwt', {httpOnly : true, sameSite : "None"}); 
         // res.clearCookie('jwt', {httpOnly : true, secure :true, sameSite : "None"}); 
         foundUser.refreshToken = ''; 

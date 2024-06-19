@@ -4,6 +4,7 @@ const app = express();
 const verifyJWT = require('./middleware/verifyJWT'); 
 const { logger } = require('./middleware/logEvents'); 
 const errorHandler = require('./middleware/errorHandler'); 
+const sessionTTL = require('./middleware/sessionTTL');
 const credentials = require('./config/credentials'); // Fixed import path
 const corsOptions = require('./config/corsOptions'); 
 const connectToDB = require('./config/dbConnection'); 
@@ -16,6 +17,7 @@ const mongoose = require('mongoose');
 const PORT = process.env.PORT || 3500;
 // Connect to DB
 connectToDB(); 
+//write a readme with all the policies implemented
 
 // Middleware
 // app.use(logger); 
@@ -25,6 +27,8 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
+app.use(sessionTTL);
+//middleware for session + session init on auth and session end on logout
 
 // Routes
 app.use('/auth', loginLimiter, require('./routes/auth')); 
