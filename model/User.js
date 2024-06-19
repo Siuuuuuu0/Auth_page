@@ -39,6 +39,7 @@ const userSchema = new Schema({
     lockedUntil : {
         type : Date, 
         default : undefined
-    }
+    }, 
+    lastLocation : String
 }); 
 module.exports = mongoose.model("User", userSchema); 

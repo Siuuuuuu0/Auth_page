@@ -11,6 +11,18 @@ const mailOptionsCode = (email, code) => {
     };
 };
 
+const unusualLoginMail = (email, location) => {
+    return {
+    from : {
+        name : "Auth page",
+        adress : process.env.EMAIL
+    }, 
+    to : email,
+    subject : 'Unusual login', 
+    text : `An unusual login has been detected from this location :  ${location}`
+    };
+};
+
 const mailOptionsConfirm = (email, url)=>{
     return  {
         from : {
@@ -45,4 +57,4 @@ const transporter = nodemailer.createTransport({
         'pass' : process.env.PASSWORD 
     }
 });
-module.exports = {mailOptionsCode, mailOptionsConfirm, failedLoginAttempt, transporter} ;
+module.exports = {mailOptionsCode, mailOptionsConfirm, failedLoginAttempt, unusualLoginMail, transporter} ;

@@ -28,6 +28,7 @@ const handleVerification = async(req, res)=> {
             {expiresIn : "1d"}
         );
         foundUser.refreshToken = refreshToken;
+        foundUser.lastLocation = req.body.location;
         await foundUser.save();
         // req.session.userId = foundUser._id;
         recordLogIns("New log in from ", req, foundUser); //no need for sync work

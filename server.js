@@ -28,7 +28,6 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
 // app.use(sessionTTL);
-//middleware for session + session init on auth and session end on logout
 
 // Routes
 app.use('/auth', loginLimiter, require('./routes/auth')); 

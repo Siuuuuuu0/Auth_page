@@ -1,4 +1,4 @@
-const {mailOptionsCode, mailOptionsConfirm, failedLoginAttempt, transporter} = require('../config/mailSettings');
+const {mailOptionsCode, mailOptionsConfirm, failedLoginAttempt, unusualLoginMail, transporter} = require('../config/mailSettings');
 const crypto = require('crypto');
 const jwt = require('jsonwebtoken'); 
 const mailCode  = async(user) =>{
@@ -9,7 +9,7 @@ const mailCode  = async(user) =>{
         if(err) console.error(err); 
         else console.log(info);
     });
-}
+};
 ///register/confirm-email
 const confirmMail = async(email, path)=>{
     const emailToken = jwt.sign(
@@ -22,11 +22,17 @@ const confirmMail = async(email, path)=>{
         if(err) console.log(err); 
         else console.log(info);
     });
-}
+};
 const failedLoginMail = (email, ip) => {
     transporter.sendMail(failedLoginAttempt(email, ip), (err, info)=>{
         if(err) console.error(err); 
         else console.log(info);
     });
+};
+const suspiciousEmail = (email, location) =>{
+    transporter.sendMail(unusualLoginMail(email, location), (err, info)=>{
+        if(err) console.error(err); 
+        else console.log(info);
+    });
 }
-module.exports = {mailCode, confirmMail, failedLoginMail};
+module.exports = {mailCode, confirmMail, failedLoginMail, suspiciousEmail};
