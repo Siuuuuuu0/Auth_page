@@ -4,8 +4,8 @@ const app = express();
 const verifyJWT = require('./middleware/verifyJWT'); 
 const { logger } = require('./middleware/logEvents'); 
 const errorHandler = require('./middleware/errorHandler'); 
-const sessionTTL = require('./middleware/sessionTTL');
-const credentials = require('./config/credentials'); // Fixed import path
+// const sessionTTL = require('./middleware/sessionTTL');
+const credentials = require('./config/credentials'); 
 const corsOptions = require('./config/corsOptions'); 
 const connectToDB = require('./config/dbConnection'); 
 const {loginLimiter, emailLimiter} = require('./config/rateLimiter');
@@ -17,7 +17,7 @@ const mongoose = require('mongoose');
 const PORT = process.env.PORT || 3500;
 // Connect to DB
 connectToDB(); 
-//write a readme with all the policies implemented
+//write a readme with all the policies implemented, write that thought about mixed approch for sessions and jwts but decided not to + why
 
 // Middleware
 // app.use(logger); 
@@ -27,7 +27,7 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
-app.use(sessionTTL);
+// app.use(sessionTTL);
 //middleware for session + session init on auth and session end on logout
 
 // Routes
