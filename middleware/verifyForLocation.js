@@ -4,7 +4,7 @@ const {suspiciousEmail} = require('../utilities/2FA');
 const verifyForLocation = async(req, res, next)=>{
     if(!req?.body?.id) return res.status(400).json({'message' : 'no Id provided'}); 
     const foundUser = await User.findOne({_id : req.body.id}).exec(); 
-    if(!foundUser) return res.status(404).json({'message' : 'user not found'});
+    if(!foundUser) return next();
     const ip = req.headers['x-forwarded-for'] || req.connection.remoteAddress;
     const geoResponse = await axios.get(`https://ipinfo.io/${ip}/json`);
     const geoData = geoResponse.data;

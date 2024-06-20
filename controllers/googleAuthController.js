@@ -38,18 +38,43 @@ const handleGoogleAuth = async(req, res)=>{
                 return done(null, foundUser);
             }
             else {
-                // const result = await User.create({
-                //     googleId : profile.id, 
-                //     email : profile.emails[0].value, 
-                //     username : undefined, //temporary 
-                //     password : '' //temporary
-                // });
-                console.log(result);
-                const toRegister = true;
-                req.toRegister = toRegister;
-                req.body.email = profile.emails[0].value; 
-                req.body.googleId = profile.id; 
-                return done(null, {result, toRegister});
+                const foundUserWithEmail = await User.findOne({email : profile.emails[0].value}).exec();
+                if(foundUserWithEmail){
+                    const roles = Object.values(foundUserWithEmail.roles);
+                    const access_Token = jwt.sign(
+                        {"Info" : {
+                            "email" : foundUserWithEmail.email, 
+                            "roles" : roles,
+                            "username" : foundUserWithEmail.username
+                        }}, 
+                        process.env.ACCESS_TOKEN_SECRET, 
+                        {expiresIn : '30s'}
+                    );
+                    const refresh_Token = jwt.sign(
+                        {
+                            "email" :foundUserWithEmail.email
+                        }, 
+                        process.env.REFRESH_TOKEN_SECRET, 
+                        {expiresIn : "1d"}
+                    );
+                    foundUserWithEmail.googleId = profile.id; 
+                    foundUserWithEmail.refreshToken = refresh_Token;
+                    foundUserWithEmail.lastLocation = req.body.location;
+                    await foundUser.save();
+                    recordLogIns("New log in from ", req, foundUserWithEmail); //no need for sync work
+                    res.cookie('jwt', refresh_Token, {httpOnly : true, sameSite : "None", maxAge : 1000*60*60*24});
+                    // res.cookie('jwt', refreshToken, {httpOnly : true, secure :true, sameSite : "None", maxAge : 1000*60*60*24});
+                    res.json({access_Token});
+                    return done(null, foundUserWithEmail);
+                }
+                else{
+                    console.log(result);
+                    const toRegister = true;
+                    req.toRegister = toRegister;
+                    req.body.email = profile.emails[0].value; 
+                    req.body.googleId = profile.id; 
+                    return done(null, {result, toRegister});
+                }
             }
         }
         catch(err){
@@ -61,7 +86,8 @@ const handleGoogleAuth = async(req, res)=>{
 }; 
 const handleGoogleCallback = async(req, res)=>{
     if(!req.toRegister) return res.status(200).json({'message' : 'registered user'});
-    else return res.status(200).json({'message' : 'toRegister'});
+    res.status(200).json({'message' : 'toRegister'});
+    res.redirect('../routes/confirm-registration');
 }
 module.exports = {handleGoogleAuth, handleGoogleCallback};
 //generate username middleware
