@@ -13,6 +13,7 @@ const cookieParser = require('cookie-parser');
 const path = require('path'); 
 const cors = require('cors');  
 const mongoose = require('mongoose'); 
+const helmet = require('helmet');
 
 const PORT = process.env.PORT || 3500;
 // Connect to DB
@@ -21,6 +22,7 @@ connectToDB();
 
 // Middleware
 // app.use(logger); 
+// app.use(helmet()); //hsts and other headers 
 app.use(credentials);
 app.use(cors(corsOptions)); 
 app.use(express.urlencoded({ extended: false }));
