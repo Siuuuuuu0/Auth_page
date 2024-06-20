@@ -41,6 +41,9 @@ const userSchema = new Schema({
         default : undefined
     }, 
     lastLocation : String, 
-    googleId : String
+    googleId : {
+        type : String, 
+        unique : true
+    }
 }); 
 module.exports = mongoose.model("User", userSchema); 

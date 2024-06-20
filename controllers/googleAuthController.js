@@ -38,14 +38,17 @@ const handleGoogleAuth = async(req, res)=>{
                 return done(null, foundUser);
             }
             else {
-                const result = await User.create({
-                    googleId : profile.id, 
-                    email : profile.emails[0].value, 
-                    username : '', //temporary 
-                    password : '' //temporary
-                });
+                // const result = await User.create({
+                //     googleId : profile.id, 
+                //     email : profile.emails[0].value, 
+                //     username : undefined, //temporary 
+                //     password : '' //temporary
+                // });
                 console.log(result);
                 const toRegister = true;
+                req.toRegister = toRegister;
+                req.body.email = profile.emails[0].value; 
+                req.body.googleId = profile.id; 
                 return done(null, {result, toRegister});
             }
         }
@@ -56,4 +59,9 @@ const handleGoogleAuth = async(req, res)=>{
     }
     ));
 }; 
-module.exports = handleGoogleAuth;
+const handleGoogleCallback = async(req, res)=>{
+    if(!req.toRegister) return res.status(200).json({'message' : 'registered user'});
+    else return res.status(200).json({'message' : 'toRegister'});
+}
+module.exports = {handleGoogleAuth, handleGoogleCallback};
+//generate username middleware

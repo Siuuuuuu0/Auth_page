@@ -2,7 +2,7 @@ const bcrypt = require('bcrypt');
 const recordLogIns = require('../utilities/recordLogIns');
 const User = require('../model/User');
 const handleConfirmation = async(req, res)=>{
-    const {password, email, username } = req.body; 
+    const {password, email, username, googleId } = req.body; 
     if(!password||!email) return res.status(400).json({'message' : 'password and email required'});
     if(username) {
         const duplicateUsername = await User.findOne({username}).exec();
@@ -13,6 +13,7 @@ const handleConfirmation = async(req, res)=>{
     try{
         const hashedPwd = await bcrypt.hash(password, 10);
         const result = await User.create({
+        googleId : googleId,
         password :hashedPwd, 
         email :email, 
         username : username?username:email //if username exists then username, else the email
@@ -24,7 +25,7 @@ const handleConfirmation = async(req, res)=>{
     }
     catch(err){
         if(err.code===11000) 
-            return res.status(403).json({'message' : 'username or email taken in the meantime'});
+            return res.status(403).json({'message' : 'username, email or googleId taken in the meantime'});
         return res.status(500).json({'message' : err.message}); 
     }
 }
