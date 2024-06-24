@@ -1,5 +1,7 @@
-const {handleGoogleAuth} = require('../controllers/googleAuthController');
 const router = require('express').Router();
-router.post('/', handleGoogleAuth); 
-router.post('/callback', require('./google-callback')); 
+const passport = require('../controllers/googleAuthController');
+router.use('/callback', require('./google-callback')); 
+router.use('/', passport.authenticate('google', { scope:
+    ['email', 'profile']
+}));
 module.exports = router; 

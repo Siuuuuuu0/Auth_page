@@ -1,93 +1,109 @@
-const passport = require('passport'); 
-const GoogleStrategy = require('passport-google-oauth20').Strategy; 
+const passport = require('passport');
+const GoogleStrategy = require('passport-google-oauth20').Strategy;
 const User = require('../model/User');
-const handleGoogleAuth = async(req, res)=>{
-    passport.use(new GoogleStrategy({
-        clientID : process.env.GOOGLE_CLIENT_ID, 
-        clientSecret : process.env.CLIENT_SECRET,
-        callbackURL : "/auth/google/callback" //if registration auth route to register username and password, else the root route
-    }, 
-    async(accessToken, refreshToken, profile, done)=>{
-        try{
-            const foundUser = await User.findOne({googleId : profile.id}).exec();
-            if(foundUser) {
-                const roles = Object.values(foundUser.roles);
-                const access_Token = jwt.sign(
-                    {"Info" : {
-                        "email" : foundUser.email, 
-                        "roles" : roles,
-                        "username" : foundUser.username
-                    }}, 
-                    process.env.ACCESS_TOKEN_SECRET, 
-                    {expiresIn : '30s'}
-                );
-                const refresh_Token = jwt.sign(
-                    {
-                        "email" :foundUser.email
-                    }, 
-                    process.env.REFRESH_TOKEN_SECRET, 
-                    {expiresIn : "1d"}
-                );
-                foundUser.refreshToken = refresh_Token;
-                foundUser.lastLocation = req.body.location;
-                await foundUser.save();
-                recordLogIns("New log in from ", req, foundUser); //no need for sync work
-                res.cookie('jwt', refresh_Token, {httpOnly : true, sameSite : "None", maxAge : 1000*60*60*24});
-                // res.cookie('jwt', refreshToken, {httpOnly : true, secure :true, sameSite : "None", maxAge : 1000*60*60*24});
-                res.json({access_Token});
-                return done(null, foundUser);
+const jwt = require('jsonwebtoken');
+// const { logEvents } = require('../middleware/logEvents');
+const recordLogIns = require('../utilities/recordLogIns');
+
+
+// Configure Google OAuth strategy
+passport.use(new GoogleStrategy({
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.CLIENT_SECRET,
+  callbackURL: "/auth/google/callback",
+  passReqToCallback: true
+}, async (req, accessToken, refreshToken, profile, done) => {
+//   logEvents(JSON.stringify(profile), 'googleProfiles.txt');
+  
+  try {
+    // Check if user exists with Google ID
+    let foundUser = await User.findOne({ googleId: profile.id }).exec();
+    
+    if (foundUser) {
+      // User exists, generate tokens and update user data
+      const roles = Object.values(foundUser.roles);
+      const access_Token = jwt.sign(
+        {
+          "Info": {
+            "email": foundUser.email,
+            "roles": roles,
+            "username": foundUser.username
+          }
+        },
+        process.env.ACCESS_TOKEN_SECRET,
+        { expiresIn: '30s' }
+      );
+      const refresh_Token = jwt.sign(
+        { "email": foundUser.email },
+        process.env.REFRESH_TOKEN_SECRET,
+        { expiresIn: "1d" }
+      );
+      foundUser.refreshToken = refresh_Token;
+      foundUser.lastLocation = req.body.location ? req.body.location : undefined;
+      await foundUser.save();
+      recordLogIns("New log in from ", req, foundUser);
+      req.user = {foundUser, access_Token}
+      
+      return done(null, req.user);
+    } else {
+      // User not found, check by email
+      foundUser = await User.findOne({ email: profile.emails[0].value }).exec();
+      
+      if (foundUser) {
+        // User found by email, link Google ID and update tokens
+        const roles = Object.values(foundUser.roles);
+        const access_Token = jwt.sign(
+          {
+            "Info": {
+              "email": foundUser.email,
+              "roles": roles,
+              "username": foundUser.username
             }
-            else {
-                const foundUserWithEmail = await User.findOne({email : profile.emails[0].value}).exec();
-                if(foundUserWithEmail){
-                    const roles = Object.values(foundUserWithEmail.roles);
-                    const access_Token = jwt.sign(
-                        {"Info" : {
-                            "email" : foundUserWithEmail.email, 
-                            "roles" : roles,
-                            "username" : foundUserWithEmail.username
-                        }}, 
-                        process.env.ACCESS_TOKEN_SECRET, 
-                        {expiresIn : '30s'}
-                    );
-                    const refresh_Token = jwt.sign(
-                        {
-                            "email" :foundUserWithEmail.email
-                        }, 
-                        process.env.REFRESH_TOKEN_SECRET, 
-                        {expiresIn : "1d"}
-                    );
-                    foundUserWithEmail.googleId = profile.id; 
-                    foundUserWithEmail.refreshToken = refresh_Token;
-                    foundUserWithEmail.lastLocation = req.body.location;
-                    await foundUser.save();
-                    recordLogIns("New log in from ", req, foundUserWithEmail); //no need for sync work
-                    res.cookie('jwt', refresh_Token, {httpOnly : true, sameSite : "None", maxAge : 1000*60*60*24});
-                    // res.cookie('jwt', refreshToken, {httpOnly : true, secure :true, sameSite : "None", maxAge : 1000*60*60*24});
-                    res.json({access_Token});
-                    return done(null, foundUserWithEmail);
-                }
-                else{
-                    console.log(result);
-                    const toRegister = true;
-                    req.toRegister = toRegister;
-                    req.body.email = profile.emails[0].value; 
-                    req.body.googleId = profile.id; 
-                    return done(null, {result, toRegister});
-                }
-            }
-        }
-        catch(err){
-            console.error(err); 
-            return done(err, null);
-        }
+          },
+          process.env.ACCESS_TOKEN_SECRET,
+          { expiresIn: '30s' }
+        );
+        const refresh_Token = jwt.sign(
+          { "email": foundUser.email },
+          process.env.REFRESH_TOKEN_SECRET,
+          { expiresIn: "1d" }
+        );
+        foundUser.googleId = profile.id;
+        foundUser.refreshToken = refresh_Token;
+        foundUser.lastLocation = req.body.location ? req.body.location : undefined;
+        await foundUser.save();
+        recordLogIns("New log in from ", req, foundUser);
+        req.user = {foundUser, access_Token};
+        
+        return done(null, req.user);
+      } else {
+        // User needs to register, set req.toRegister flag and continue
+        req.user = { toRegister: true };
+        req.body.email = profile.emails[0].value;
+        req.body.googleId = profile.id;
+        
+        return done(null, req.user);
+      }
     }
-    ));
-}; 
-const handleGoogleCallback = async(req, res)=>{
-    if(!req.toRegister) return res.status(200).json({'message' : 'registered user'});
-    res.status(200).json({'message' : 'toRegister'});
-    res.redirect('../routes/confirm-registration');
-}
-module.exports = {handleGoogleAuth, handleGoogleCallback};
-//generate username middleware
+  } catch (err) {
+    console.error(err);
+    return done(err, null);
+  }
+}));
+
+// Serialize and deserialize user (required for persistent login sessions)
+passport.serializeUser((user, done) => {
+  done(null, user);
+});
+
+passport.deserializeUser((user, done) => {
+  done(null, user);
+});
+
+module.exports = passport;
+
+
+
+
+
+

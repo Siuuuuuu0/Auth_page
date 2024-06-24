@@ -1,3 +1,24 @@
 res.senStatus is not a function	f8475afa-a0cd-4ed2-90ed-d189caf12590	20240616	23:07:36
 ENOENT: no such file or directory, stat 'C:\Users\vadim\OneDrive\Документы\Coding\MERN_Stack\Auth_Page\views\404.html'	632eae39-1b81-4d85-8b9a-632789eeefb4	20240617	16:44:22
 ENOENT: no such file or directory, stat 'C:\Users\vadim\OneDrive\Документы\Coding\MERN_Stack\Auth_Page\views\404.html'	e356811c-3ce4-45ca-84d6-3aed0acc59c2	20240619	18:43:59
+Unknown authentication strategy "google"	8cf66fc8-195c-4256-9bb7-89563e0b9027	20240624	18:43:38
+done is not a function	90a091b6-1dc1-46d3-afeb-2521b40c973d	20240624	20:09:24
+jwt is not defined	dc6496fc-344e-4a6d-8d17-429aaf5a1928	20240624	20:15:57
+Cannot read properties of null (reading 'save')	a3982a8a-a66e-4f42-a041-a537c219518e	20240624	20:17:14
+recordLogIns is not defined	ff6b4933-8dac-4cbb-a214-0bafd74e9197	20240624	20:18:27
+Cannot set headers after they are sent to the client	a2bb944c-f127-4891-8ea8-b11d02ccad5c	20240624	20:19:39
+res is not defined	3b59a8fc-f77c-4f4f-9503-8f208b7bccbb	20240624	20:28:15
+path must be absolute or specify root to res.sendFile	cf6107d0-c1d2-451e-92d4-2c4453ce1cd5	20240624	20:51:23
+Cannot read properties of undefined (reading 'toRegister')	0223abce-e6f5-42e1-b749-2bef58c0f223	20240624	21:03:44
+Bad Request	35b16227-be79-456b-88e2-85241ebcb3bf	20240624	21:12:05
+Bad Request	3bba40c6-f91d-44cd-88e9-45f9f1874e5c	20240624	21:13:25
+Bad Request	e3d4c65d-1ba6-4ca8-98b7-c965e75f451e	20240624	21:22:05
+Bad Request	52022927-3875-4290-a40d-2cc0e06dcbd2	20240624	21:39:37
+logEvents is not a function	93d808a8-6dc1-4cb8-985e-8ee527ccad8b	20240624	21:39:51
+Bad Request	81e30caa-be0f-476f-b9c9-21a181ec4d12	20240624	21:40:30
+Bad Request	233493ae-8350-4242-a163-427489b36fd1	20240624	21:42:20
+Bad Request	1bf3246f-f6aa-4896-92a0-a38045a544fb	20240624	21:43:51
+Bad Request	238b5b9a-9cd1-4871-baec-45d2465d6c2f	20240624	21:44:37
+Bad Request	7db083a1-639c-464f-9754-55c28d9d0727	20240624	21:53:37
+Bad Request	d66396fa-4425-4403-b3c0-16a54628557a	20240624	21:53:49
+Bad Request	225fb9f1-1d99-433a-9292-6b7c792bc9eb	20240624	21:54:50

@@ -1,4 +1,5 @@
-const {handleGoogleCallback} = require('../controllers/googleAuthController');
+const handleGoogleCallback = require('../middleware/googleCallback');
+const setAccessTokenCookie = require('../middleware/setAcessTokenCookie');
 const router = require('express').Router(); 
-router.post('./', handleGoogleCallback); 
+router.use('/', handleGoogleCallback, setAccessTokenCookie); 
 module.exports = router;  

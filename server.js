@@ -1,5 +1,6 @@
 require('dotenv').config();
 const express = require('express');
+const session = require('express-session');
 const app = express(); 
 const verifyJWT = require('./middleware/verifyJWT'); 
 const { logger } = require('./middleware/logEvents'); 
@@ -13,7 +14,8 @@ const cookieParser = require('cookie-parser');
 const path = require('path'); 
 const cors = require('cors');  
 const mongoose = require('mongoose'); 
-const helmet = require('helmet');
+// const helmet = require('helmet');
+const passport = require('./controllers/googleAuthController'); 
 
 const PORT = process.env.PORT || 3500;
 // Connect to DB
@@ -29,9 +31,21 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
+app.use(session({
+    secret : 'dog',
+    resave : false, 
+    saveUninitialized : true, 
+    cookie : {secure : false} 
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 // app.use(sessionTTL);
 
 // Routes
+app.use('/testing', (req, res)=>{
+    res.sendFile(path.join(__dirname, 'public', '404.html'));
+}); 
+app.use('/success', require('./routes/root'));
 app.use('/auth', loginLimiter, require('./routes/auth')); 
 app.use('/logout', require('./routes/logout')); 
 app.use('/register', require('./routes/register')); 
