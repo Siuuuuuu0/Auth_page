@@ -3,7 +3,7 @@ const getId = require('../../../middleware/getId');
 const roles = require('../../../config/roles');
 const verifyRoles = require('../../../middleware/verifyRoles'); 
 const alreadyExists = require('../../../middleware/userOrMailExists');
-const {deleteUser, updateUser, getUsers, createUser, getUser} = require('../../../controllers/usersController');
+const {deleteUser, updateUser, getUsers, createUser, getUser} = require('../../../controllers/users/usersController');
 router.route('/')
     .get(getUsers)
     .post(verifyRoles(roles.Admin), alreadyExists, createUser)

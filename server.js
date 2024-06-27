@@ -15,7 +15,7 @@ const path = require('path');
 const cors = require('cors');  
 const mongoose = require('mongoose'); 
 // const helmet = require('helmet');
-const passport = require('./controllers/googleAuthController'); 
+const passport = require('./controllers/auth/googleAuthController'); 
 
 const PORT = process.env.PORT || 3500;
 // Connect to DB
@@ -46,11 +46,11 @@ app.use('/testing', (req, res)=>{
     res.sendFile(path.join(__dirname, 'public', '404.html'));
 }); 
 app.use('/success', require('./routes/root'));
-app.use('/auth', loginLimiter, require('./routes/auth')); 
-app.use('/logout', require('./routes/logout')); 
+app.use('/auth', loginLimiter, require('./routes/apis/auth/auth')); 
+app.use('/logout', require('./routes/apis/auth/logout')); 
 app.use('/register', require('./routes/apis/auth/registration/register')); 
-app.use('/refresh', require('./routes/refresh'));  
-app.use('/verify', emailLimiter, require('./routes/verify'));
+app.use('/refresh', require('./routes/apis/auth/refresh'));  
+app.use('/verify', emailLimiter, require('./routes/apis/auth/verify'));
 app.use('/reset', require('./routes/apis/account/reset'));
 
 // Protected routes
