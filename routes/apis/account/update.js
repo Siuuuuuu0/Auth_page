@@ -1,5 +1,5 @@
 const router = require('express').Router(); 
-const {handleChangeCredentials}  = require('../../../controllers/updateController');
+const {handleChangeCredentials}  = require('../../../controllers/account/updateController');
 const alreadyExists = require('../../../middleware/userOrMailExists');
 const verifyEmail = require('../../../middleware/verifyEmail');
 router.post('/', alreadyExists, handleChangeCredentials);

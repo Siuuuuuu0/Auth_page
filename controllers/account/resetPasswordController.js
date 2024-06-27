@@ -1,6 +1,6 @@
-const User = require('../model/User'); 
+const User = require('../../model/User'); 
 const bcrypt = require('bcrypt'); 
-const {confirmMail} = require('../utilities/2FA'); 
+const {confirmMail} = require('../../utilities/2FA'); 
 const sendResetMail = async(req, res)=>{
     if(!req?.body?.id) return res.status(400).json({'message' : 'no id provided'}); 
     const foundUser = await User.findOne({_id : req.body.id}).exec(); 

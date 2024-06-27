@@ -1,4 +1,4 @@
-const User = require('../model/User');
+const User = require('../../model/User');
 const bcrypt = require('bcrypt'); 
 const deleteUser= async(req, res)=>{
     if(!req?.body?.id) return res.status(400).json({'message' : 'id required'});

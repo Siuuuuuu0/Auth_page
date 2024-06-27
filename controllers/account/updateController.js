@@ -1,5 +1,5 @@
-const User = require('../model/User');
-const {confirmMail} = require('../utilities/2FA');
+const User = require('../../model/User');
+const {confirmMail} = require('../../utilities/2FA');
 const bcrypt = require('bcrypt');
 const handleChangeCredentials = async(req, res)=>{
     const {password, email, username, id} = req.body;

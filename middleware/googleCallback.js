@@ -1,4 +1,4 @@
-const  passport  = require('../controllers/googleAuthController');
+const  passport  = require('../controllers/auth/googleAuthController');
 const handleGoogleCallback = (req, res, next) => {
   passport.authenticate('google', (err, user, info) => {
     if (err) return next(err);
@@ -8,6 +8,7 @@ const handleGoogleCallback = (req, res, next) => {
       if (req.user.toRegister) {
         res.redirect('/register/confirm-registration');
       } else {
+        req.body.id = req.user.foundUser._id;
         next();
       }
     });

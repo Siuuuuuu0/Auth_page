@@ -12,6 +12,10 @@ const verifyForLocation = async(req, res, next)=>{
     console.log(currentLocation);
     if(currentLocation!==foundUser.lastLocation) 
         suspiciousEmail(foundUser.email, currentLocation);
+    if(req.body.user) {
+        foundUser.lastLocation = currentLocation;
+        await foundUser.save(); 
+    } 
     req.body.location = currentLocation;
     next();
 

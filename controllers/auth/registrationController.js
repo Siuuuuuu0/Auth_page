@@ -1,5 +1,5 @@
-const User = require('../model/User'); 
-const {confirmMail} = require('../utilities/2FA');
+const User = require('../../model/User'); 
+const {confirmMail} = require('../../utilities/2FA');
 const handleRegistration = async(req, res) => {
     if(!req?.body?.email) res.status(400).json({'message' : 'email required'});
     const {email} = req.body; 

@@ -1,9 +1,9 @@
 const passport = require('passport');
 const GoogleStrategy = require('passport-google-oauth20').Strategy;
-const User = require('../model/User');
+const User = require('../../model/User');
 const jwt = require('jsonwebtoken');
 // const { logEvents } = require('../middleware/logEvents');
-const recordLogIns = require('../utilities/recordLogIns');
+const recordLogIns = require('../../utilities/recordLogIns');
 
 
 // Configure Google OAuth strategy

@@ -1,5 +1,5 @@
 const router = require('express').Router(); 
-const handleAuth = require('../controllers/authController'); 
+const handleAuth = require('../../../controllers/auth/authController'); 
 router.post('/', handleAuth); 
-router.use('/google', require('./google')); //verifyForLocation
+router.use('/google', require('./google')); 
 module.exports = router; 
