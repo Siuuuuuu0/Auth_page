@@ -1,7 +1,7 @@
-const User = require('../model/User');
+const User = require('../../model/User');
 const jwt = require('jsonwebtoken');
-const recordLogIns = require('../utilities/recordLogIns');
-const lockAccount = require('../utilities/lockAccount');
+const recordLogIns = require('../../utilities/recordLogIns');
+const lockAccount = require('../../utilities/lockAccount');
 const handleVerification = async(req, res)=> {
     if(!req?.body?.code||!req.body.id) return res.status(400).json({'message' : 'no code provided'});
     const foundUser = await User.findOne({_id : req.body.id}).exec(); 

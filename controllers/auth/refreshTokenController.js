@@ -1,5 +1,5 @@
 const jwt = require('jsonwebtoken'); 
-const User = require('../model/User');
+const User = require('../../model/User');
 const handleRefreshToken = async(req, res)=>{
     const cookies = req.cookies; 
     if(!cookies?.jwt) return res.status(401).json({'message' : 'No cookie'}); 

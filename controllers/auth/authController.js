@@ -1,6 +1,6 @@
-const User = require('../model/User'); 
+const User = require('../../model/User'); 
 const bcrypt = require('bcrypt');
-const {mailCode} = require('../utilities/2FA');
+const {mailCode} = require('../../utilities/2FA');
 const handleAuth = async(req, res)=>{
     const {userOrMail, password} = req.body; 
     const regex = /[a-zA-Z0-9]+$/;

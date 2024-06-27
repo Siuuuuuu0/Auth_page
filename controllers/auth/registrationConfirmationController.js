@@ -1,6 +1,6 @@
 const bcrypt = require('bcrypt');
-const recordLogIns = require('../utilities/recordLogIns');
-const User = require('../model/User');
+const recordLogIns = require('../../utilities/recordLogIns');
+const User = require('../../model/User');
 const handleConfirmation = async(req, res)=>{
     const {password, email, username, googleId } = req.body; 
     if(!password||!email) return res.status(400).json({'message' : 'password and email required'});

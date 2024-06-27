@@ -48,15 +48,15 @@ app.use('/testing', (req, res)=>{
 app.use('/success', require('./routes/root'));
 app.use('/auth', loginLimiter, require('./routes/auth')); 
 app.use('/logout', require('./routes/logout')); 
-app.use('/register', require('./routes/register')); 
+app.use('/register', require('./routes/apis/auth/registration/register')); 
 app.use('/refresh', require('./routes/refresh'));  
 app.use('/verify', emailLimiter, require('./routes/verify'));
-app.use('/reset', require('./routes/reset'));
+app.use('/reset', require('./routes/apis/account/reset'));
 
 // Protected routes
 app.use(verifyJWT); 
-app.use('/update', require('./routes/update'));
-app.use('/users', require('./routes/api/users')); 
+app.use('/update', require('./routes/apis/account/update'));
+app.use('/users', require('./routes/apis/users/users')); 
 app.use('/', require('./routes/root'));
 
 // 404 Handler
