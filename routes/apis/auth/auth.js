@@ -1,5 +1,10 @@
 const router = require('express').Router(); 
 const handleAuth = require('../../../controllers/auth/authController'); 
+const {emailLimiter} = require('../../../config/rateLimiter');
 router.post('/', handleAuth); 
 router.use('/google', require('./google/google')); 
+router.use('/logout', require('./logout'));
+router.use('/register', require('./registration/register')); 
+router.use('/refresh', require('./refresh'));  
+router.use('/verify', emailLimiter, require('./verify'));
 module.exports = router; 

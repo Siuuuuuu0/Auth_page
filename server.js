@@ -9,7 +9,7 @@ const errorHandler = require('./middleware/errorHandler');
 const credentials = require('./config/credentials'); 
 const corsOptions = require('./config/corsOptions'); 
 const connectToDB = require('./config/dbConnection'); 
-const {loginLimiter, emailLimiter} = require('./config/rateLimiter');
+const {loginLimiter} = require('./config/rateLimiter');
 const cookieParser = require('cookie-parser'); 
 const path = require('path'); 
 const cors = require('cors');  
@@ -47,17 +47,17 @@ app.use('/testing', (req, res)=>{
 }); 
 app.use('/success', require('./routes/root'));
 app.use('/auth', loginLimiter, require('./routes/apis/auth/auth')); 
-app.use('/logout', require('./routes/apis/auth/logout')); 
-app.use('/register', require('./routes/apis/auth/registration/register')); 
-app.use('/refresh', require('./routes/apis/auth/refresh'));  
-app.use('/verify', emailLimiter, require('./routes/apis/auth/verify'));
+// app.use('/logout', require('./routes/apis/auth/logout')); 
+// app.use('/register', require('./routes/apis/auth/registration/register')); 
+// app.use('/refresh', require('./routes/apis/auth/refresh'));  
+// app.use('/verify', emailLimiter, require('./routes/apis/auth/verify'));
 app.use('/reset', require('./routes/apis/account/reset'));
 
 // Protected routes
 app.use(verifyJWT); 
 app.use('/update', require('./routes/apis/account/update'));
 app.use('/users', require('./routes/apis/users/users')); 
-app.use('/', require('./routes/root'));
+app.use('/root', require('./routes/root'));
 
 // 404 Handler
 app.all('/*', (req, res) => {

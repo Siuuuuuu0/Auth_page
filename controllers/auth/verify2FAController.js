@@ -3,8 +3,10 @@ const jwt = require('jsonwebtoken');
 const recordLogIns = require('../../utilities/recordLogIns');
 const lockAccount = require('../../utilities/lockAccount');
 const handleVerification = async(req, res)=> {
-    if(!req?.body?.code||!req.body.id) return res.status(400).json({'message' : 'no code provided'});
-    const foundUser = await User.findOne({_id : req.body.id}).exec(); 
+    if(!req?.body?.code||!req.body.userOrMail) return res.status(400).json({'message' : 'no code provided'});
+    const regex = /[a-zA-Z0-9]+$/;
+    const isUsername = regex.test(req.body.userOrMail);
+    const foundUser = await User.findOne(isUsername?{username : req.body.userOrMail}:{email : req.body.userOrMail}).exec();
     if(!foundUser) return res.status(404).json({'message' : 'no such user'});
     const match = req.body.code === foundUser.twoFactorCode;
     foundUser.twoFactorCode = null; 
@@ -18,7 +20,7 @@ const handleVerification = async(req, res)=> {
                 "username" : foundUser.username
             }}, 
             process.env.ACCESS_TOKEN_SECRET, 
-            {expiresIn : '30s'}
+            {expiresIn : '15m'}
         );
         const refreshToken = jwt.sign(
             {
