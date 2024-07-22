@@ -1,7 +1,9 @@
 const router = require('express').Router();
-const passport = require('../../../../controllers/auth/googleAuthController');
-router.get('/callback', require('./google-callback')); 
-router.get('/', passport.authenticate('google', { scope:
-    ['email', 'profile']
-}));
+const handleGoogleAuth = require('../../../../controllers/auth/googleAuthController')
+// const passport = require('../../../../controllers/auth/googleAuthController');
+// router.use('/callback', require('./google-callback')); 
+// router.use('/', passport.authenticate('google', { scope:
+//     ['email', 'profile']
+// }));
+router.use('/', handleGoogleAuth)
 module.exports = router; 

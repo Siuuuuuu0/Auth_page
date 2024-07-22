@@ -15,7 +15,7 @@ const path = require('path');
 const cors = require('cors');  
 const mongoose = require('mongoose'); 
 // const helmet = require('helmet');
-const passport = require('./controllers/auth/googleAuthController'); 
+// const passport = require('./controllers/auth/googleAuthController'); 
 
 const PORT = process.env.PORT || 3500;
 // Connect to DB
@@ -31,14 +31,14 @@ app.use(express.urlencoded({ extended: false }));
 app.use(express.json()); 
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, '/public')));
-app.use(session({
-    secret : 'dog',
-    resave : false, 
-    saveUninitialized : true, 
-    cookie : {secure : false} 
-}));
-app.use(passport.initialize());
-app.use(passport.session());
+// app.use(session({
+//     secret : 'dog',
+//     resave : false, 
+//     saveUninitialized : true, 
+//     cookie : {secure : false} 
+// }));
+// app.use(passport.initialize());
+// app.use(passport.session());
 // app.use(sessionTTL);
 
 // Routes
