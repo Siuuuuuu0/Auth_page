@@ -4,6 +4,7 @@ const corsOptions = {
         if(whitelist.includes(origin)||!origin) callback(null, true); 
         else callback(new Error("Blocked by CORS"));
     }, 
-    optionsSuccessStatus : 200
+    optionsSuccessStatus : 200, 
+    credentials: true,
 };
 module.exports = corsOptions; 

@@ -17,7 +17,7 @@ const confirmMail = async(email, path)=>{
         process.env.EMAIL_TOKEN_SECRET, 
         {expiresIn : '10m'}
     );
-    const url = `${process.env.BASE_URL}${path}?token=${emailToken}`;
+    const url = `${process.env.BASE_URL_FRONT}${path}?token=${emailToken}`;
     transporter.sendMail(mailOptionsConfirm(email, url), (err, info)=>{
         if(err) console.log(err); 
         else console.log(info);
