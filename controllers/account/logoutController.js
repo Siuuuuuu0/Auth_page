@@ -5,9 +5,9 @@ const handleLogout = async(req, res)=>{
     const refreshToken = cookies.jwt;
     const foundUser = await User.findOne({refreshToken}).exec();
     if(!foundUser) {
-        res.clearCookie('jwt', {httpOnly : true, sameSite : "None"}); 
+        res.clearCookie('jwt', {httpOnly : true, secure : true, sameSite : "None"}); 
         // res.clearCookie('jwt', {httpOnly :true, secure: true, sameSite :'None'}); 
-        return res.sendStatus(403); 
+        return res.status(403).json({message : 'no such user'}); 
     }
     else{
         // req.session.destroy((err)=>{
@@ -16,11 +16,11 @@ const handleLogout = async(req, res)=>{
         //         res.clearCookie('connect.sid');
         //     }
         // });
-        res.clearCookie('jwt', {httpOnly : true, sameSite : "None"}); 
+        res.clearCookie('jwt', {httpOnly : true, secure : true, sameSite : "None"}); 
         // res.clearCookie('jwt', {httpOnly : true, secure :true, sameSite : "None"}); 
         foundUser.refreshToken = ''; 
         await foundUser.save(); 
-        return res.sendStatus(204); 
+        return res.json({message : 'logout successful'}); 
     }
 
 }; 

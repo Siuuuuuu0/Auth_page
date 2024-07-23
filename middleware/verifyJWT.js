@@ -7,7 +7,7 @@ const verifyJWT = (req, res, next) => {
         accessToken, 
         process.env.ACCESS_TOKEN_SECRET, 
         (err, decoded)=>{
-            if(err) return res.sendStatus(403); 
+            if(err) return res.status(403).json({'message' : 'jwt failed'}); 
             req.email = decoded.Info.email; 
             req.roles = decoded.Info.roles;
             req.username = decoded.Info.username; 
