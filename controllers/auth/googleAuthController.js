@@ -133,7 +133,11 @@ const handleGoogleAuth = async (req, res) => {
     await foundUser.save();
     recordLogIns("New log in from ", req, foundUser);
     res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: "None", secure : true, maxAge: 1000 * 60 * 60 * 24 });
-    return res.json({ accessToken });
+    const account = {
+      username : foundUser.username, 
+      email : foundUser.email
+    }
+    return res.json({ accessToken, account : account });
   } else {
     // User not found, check by email
     foundUser = await User.findOne({ email: req.body.email }).exec();
@@ -165,7 +169,11 @@ const handleGoogleAuth = async (req, res) => {
       await foundUser.save();
       recordLogIns("New log in from ", req, foundUser);
       res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: "None", secure : true, maxAge: 1000 * 60 * 60 * 24 });
-      return res.json({ accessToken });
+      const account = {
+        username : foundUser.username, 
+        email : foundUser.email
+      }
+      return res.json({ accessToken, account : account });
     } else {
       return res.json({ toRegister: true, email: req.body.email, googleId: req.body.googleId });
     }

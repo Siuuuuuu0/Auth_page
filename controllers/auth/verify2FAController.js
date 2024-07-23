@@ -37,7 +37,11 @@ const handleVerification = async(req, res)=> {
         recordLogIns("New log in from ", req, foundUser); //no need for sync work
         // res.cookie('jwt', refreshToken, {httpOnly : true, sameSite : "None", maxAge : 1000*60*60*24});
         res.cookie('jwt', refreshToken, {httpOnly : true, secure :true, sameSite : "None", maxAge : 1000*60*60*24});
-        return res.json({accessToken});
+        const account = {
+            username : foundUser.username, 
+            email : foundUser.email
+          }
+        return res.json({accessToken, account : account});
     }
     else {
         await lockAccount(foundUser);
