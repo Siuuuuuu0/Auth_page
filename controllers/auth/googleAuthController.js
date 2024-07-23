@@ -122,7 +122,9 @@ const handleGoogleAuth = async (req, res) => {
       { expiresIn: '15m' }
     );
     const refreshToken = jwt.sign(
-      { "email": foundUser.email },
+      { "email": foundUser.email, 
+        "username" : foundUser.username
+       },
       process.env.REFRESH_TOKEN_SECRET,
       { expiresIn: "30d" }
     );
@@ -130,7 +132,7 @@ const handleGoogleAuth = async (req, res) => {
     foundUser.lastLocation = req.body.location ? req.body.location : undefined;
     await foundUser.save();
     recordLogIns("New log in from ", req, foundUser);
-    res.cookie('jwt', accessToken, { httpOnly: true, sameSite: "None", secure : true, maxAge: 1000 * 60 * 60 * 24 });
+    res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: "None", secure : true, maxAge: 1000 * 60 * 60 * 24 });
     return res.json({ accessToken });
   } else {
     // User not found, check by email
@@ -148,10 +150,12 @@ const handleGoogleAuth = async (req, res) => {
           }
         },
         process.env.ACCESS_TOKEN_SECRET,
-        { expiresIn: '30s' }
+        { expiresIn: '15m' }
       );
       const refreshToken = jwt.sign(
-        { "email": foundUser.email },
+        { "email": foundUser.email, 
+          "username" : foundUser.username
+         },
         process.env.REFRESH_TOKEN_SECRET,
         { expiresIn: "1d" }
       );
@@ -160,7 +164,7 @@ const handleGoogleAuth = async (req, res) => {
       foundUser.lastLocation = req.body.location ? req.body.location : undefined;
       await foundUser.save();
       recordLogIns("New log in from ", req, foundUser);
-      res.cookie('jwt', accessToken, { httpOnly: true, sameSite: "None", secure : true, maxAge: 1000 * 60 * 60 * 24 });
+      res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: "None", secure : true, maxAge: 1000 * 60 * 60 * 24 });
       return res.json({ accessToken });
     } else {
       return res.json({ toRegister: true, email: req.body.email, googleId: req.body.googleId });

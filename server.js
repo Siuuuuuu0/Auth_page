@@ -1,6 +1,6 @@
 require('dotenv').config();
 const express = require('express');
-const session = require('express-session');
+// const session = require('express-session');
 const app = express(); 
 const verifyJWT = require('./middleware/verifyJWT'); 
 const { logger } = require('./middleware/logEvents'); 
@@ -47,10 +47,6 @@ app.use('/testing', (req, res)=>{
 }); 
 app.use('/success', require('./routes/root'));
 app.use('/auth', loginLimiter, require('./routes/apis/auth/auth')); 
-// app.use('/logout', require('./routes/apis/auth/logout')); 
-// app.use('/register', require('./routes/apis/auth/registration/register')); 
-// app.use('/refresh', require('./routes/apis/auth/refresh'));  
-// app.use('/verify', emailLimiter, require('./routes/apis/auth/verify'));
 app.use('/reset', require('./routes/apis/account/reset'));
 
 // Protected routes

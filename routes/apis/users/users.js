@@ -7,7 +7,7 @@ const {deleteUser, updateUser, getUsers, createUser, getUser} = require('../../.
 router.route('/')
     .get(getUsers)
     .post(verifyRoles(roles.Admin), alreadyExists, createUser)
-    .put(verifyRoles(roles.Admin), getId, alreadyExists, updateUser)
+    .patch(verifyRoles(roles.Admin), getId, alreadyExists, updateUser)
     .delete(verifyRoles(roles.Admin), getId, deleteUser)
 router.route('/:id')
     .get(getUser)

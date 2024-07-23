@@ -27,7 +27,7 @@ const updateUser = async(req, res)=>{
 //     } , 
 //     id : 
 const getUsers =async(req, res)=>{
-    const users = await User.find().exec();
+    const users = await await User.find().select('-password').lean();
     if(!users) return res.status(204).json({'message' : 'no users found'});
     res.status(200).json(users);
 };
@@ -48,7 +48,7 @@ const createUser = async(req, res)=>{
 };
 const getUser = async(req, res)=>{
     if(!req?.params?.id) return res.status(400).json({'message' : 'id required'});
-    const foundUser = await User.findOne({_id : req.params.id}).exec();
+    const foundUser = await User.findOne({_id : req.params.id}).select('-password').lean();
     if(!foundUser) return res.status(204).json({'message' : 'no such user'});
     res.status(200).json(foundUser);
 };
