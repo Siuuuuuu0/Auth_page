@@ -11,7 +11,7 @@ const sendResetMail = async(req, res)=>{
     res.status(200).json({'message' : 'email sent'});
 };
 const resetPassword = async(req, res)=>{
-    if(!req?.body?.email||!req.body.password) return res.status(400).json({'message' : 'no email provided'}); 
+    if(!req?.body?.email||!req.body.password) return res.status(400).json({'message' : 'no credentials provided'}); 
     const foundUser = await User.findOne({email : req.body.email}).exec(); 
     if(!foundUser) return res.status(404).json({'message' : 'no such user found'});
     foundUser.password = await bcrypt.hash(req.body.password, 10);  
