@@ -46,7 +46,8 @@ const handleComplete = async(req, res) =>{
         res.cookie('jwt', refreshToken, {httpOnly : true, secure :true, sameSite : "None", maxAge : 1000*60*60*24});
         const account = {
             username : result.username, 
-            email : result.email
+            email : result.email, 
+            id : result._id
           }
         return res.json({accessToken, account : account});
         

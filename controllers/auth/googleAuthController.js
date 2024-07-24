@@ -135,7 +135,8 @@ const handleGoogleAuth = async (req, res) => {
     res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: "None", secure : true, maxAge: 1000 * 60 * 60 * 24 });
     const account = {
       username : foundUser.username, 
-      email : foundUser.email
+      email : foundUser.email, 
+      id : foundUser._id
     }
     return res.json({ accessToken, account : account });
   } else {
@@ -171,7 +172,8 @@ const handleGoogleAuth = async (req, res) => {
       res.cookie('jwt', refreshToken, { httpOnly: true, sameSite: "None", secure : true, maxAge: 1000 * 60 * 60 * 24 });
       const account = {
         username : foundUser.username, 
-        email : foundUser.email
+        email : foundUser.email, 
+        id : foundUser._id
       }
       return res.json({ accessToken, account : account });
     } else {
