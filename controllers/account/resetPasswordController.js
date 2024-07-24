@@ -2,9 +2,12 @@ const User = require('../../model/User');
 const bcrypt = require('bcrypt'); 
 const {confirmMail} = require('../../utilities/2FA'); 
 const sendResetMail = async(req, res)=>{
-    if(!req?.body?.id) return res.status(400).json({'message' : 'no id provided'}); 
-    const foundUser = await User.findOne({_id : req.body.id}).exec(); 
-    confirmMail(foundUser.email, '/reset/confirm');
+    const userOrMail = req.body.userOrMail;
+    if (!userOrMail) return res.status(400).json({ 'message': 'no credential provided' });
+    const regex = /[a-zA-Z0-9]+$/;
+    const isUsername = regex.test(userOrMail);
+    const foundUser = await User.findOne(isUsername ? { username: userOrMail } : { email: userOrMail }).exec();
+    confirmMail(foundUser.email, '/confirm-reset');
     res.status(200).json({'message' : 'email sent'});
 };
 const resetPassword = async(req, res)=>{

@@ -1,6 +1,7 @@
 const User = require('../../model/User');
 const {confirmMail} = require('../../utilities/2FA');
 const bcrypt = require('bcrypt');
+const jwt = require ('jsonwebtoken')
 const handleChangeCredentials = async(req, res)=>{
     const {password, email, username} = req.body.toUpdate;
     const id = req.body.id
@@ -31,6 +32,26 @@ const updateEmail = async(req, res)=>{
     if(!foundUser||!foundUser.newEmail) return res.status(404).json({'message' : 'no such user'}); 
     foundUser.email = foundUser.newEmail;
     foundUser.newEmail = undefined;
+    const roles = Object.values(foundUser.roles);
+    const accessToken = jwt.sign(
+        {"Info" : {
+            "email" : foundUser.email, 
+            "roles" : roles,
+            "username" : foundUser.username, 
+            "id" : foundUser._id
+        }}, 
+        process.env.ACCESS_TOKEN_SECRET, 
+        {expiresIn : '15m'}
+    );
+    const refreshToken = jwt.sign(
+        {
+            "email" :foundUser.email, 
+            "username" : foundUser.username
+        }, 
+        process.env.REFRESH_TOKEN_SECRET, 
+        {expiresIn : "30d"}
+    );
+    foundUser.refreshToken=refreshToken
     try {
         await foundUser.save();
     }catch(err){
@@ -43,21 +64,37 @@ const updateEmail = async(req, res)=>{
         username : foundUser.username, 
         id : foundUser._id
     }
-    return res.status(200).json({account});
+    res.cookie('jwt', refreshToken, {httpOnly : true, secure :true, sameSite : "None", maxAge : 1000*60*60*24});
+    return res.json({accessToken, account});
 };
 const updatePassword = async(req, res)=>{
     if(!req?.body?.email) return res.status(400).json({'message' : 'no id provided'});
-    const foundUser = await User.findOne({email}).exec();
+    const foundUser = await User.findOne({email : req.body.email}).exec();
     if(!foundUser||!foundUser.newPassword) return res.status(404).json({'message' : 'no such user'}); 
     foundUser.password = foundUser.newPassword;
     foundUser.newPassword = undefined;
-    foundUser.refreshToken = '';
+    const roles = Object.values(foundUser.roles);
+    const accessToken = jwt.sign(
+        {"Info" : {
+            "email" : foundUser.email, 
+            "roles" : roles,
+            "username" : foundUser.username, 
+            "id" : foundUser._id
+        }}, 
+        process.env.ACCESS_TOKEN_SECRET, 
+        {expiresIn : '15m'}
+    );
+    const refreshToken = jwt.sign(
+        {
+            "email" :foundUser.email, 
+            "username" : foundUser.username
+        }, 
+        process.env.REFRESH_TOKEN_SECRET, 
+        {expiresIn : "1d"}
+    );
+    foundUser.refreshToken=refreshToken
     await foundUser.save();
-    const account = {
-        email : foundUser.email, 
-        username : foundUser.username, 
-        id : foundUser._id
-    }
-    return res.status(200).json({account});
+    res.cookie('jwt', refreshToken, {httpOnly : true, secure :true, sameSite : "None", maxAge : 1000*60*60*24});
+    return res.json({accessToken});
 };
 module.exports = {handleChangeCredentials, updateEmail, updatePassword};

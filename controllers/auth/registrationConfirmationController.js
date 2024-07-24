@@ -25,7 +25,8 @@ const handleComplete = async(req, res) =>{
             {"Info" : {
                 "email" : result.email, 
                 "roles" : Object.values(result.roles),
-                "username" : result.username
+                "username" : result.username, 
+                "id" : result._id
             }}, 
             process.env.ACCESS_TOKEN_SECRET, 
             {expiresIn : '15m'}
@@ -44,12 +45,7 @@ const handleComplete = async(req, res) =>{
         recordLogIns("First log in from ", req, result);
         // return res.status(201).json({'message' : `User ${result} has been created`});
         res.cookie('jwt', refreshToken, {httpOnly : true, secure :true, sameSite : "None", maxAge : 1000*60*60*24});
-        const account = {
-            username : result.username, 
-            email : result.email, 
-            id : result._id
-          }
-        return res.json({accessToken, account : account});
+        return res.json({accessToken});
         
     }
     catch(err){

@@ -7,6 +7,6 @@ const verifyEmail = require('../../../middleware/verifyEmail');
 router.route('/')
     .patch(alreadyExists, handleChangeCredentials)
     .delete(getId, deleteUser)
-router.patch('/update-email', verifyEmail, require('./update-email'));
-router.patch('/update-password', verifyEmail, require('./update-password'));
+router.use('/update-email', verifyEmail, require('./update-email'));
+router.use('/update-password', verifyEmail, require('./update-password'));
 module.exports = router; 

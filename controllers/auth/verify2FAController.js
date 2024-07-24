@@ -17,7 +17,8 @@ const handleVerification = async(req, res)=> {
             {"Info" : {
                 "email" : foundUser.email, 
                 "roles" : roles,
-                "username" : foundUser.username
+                "username" : foundUser.username, 
+                "id" : foundUser._id
             }}, 
             process.env.ACCESS_TOKEN_SECRET, 
             {expiresIn : '15m'}
@@ -28,7 +29,7 @@ const handleVerification = async(req, res)=> {
                 "username" : foundUser.username
             }, 
             process.env.REFRESH_TOKEN_SECRET, 
-            {expiresIn : "1d"}
+            {expiresIn : "30d"}
         );
         foundUser.refreshToken = refreshToken;
         foundUser.lastLocation = req.body.location;
@@ -37,12 +38,7 @@ const handleVerification = async(req, res)=> {
         recordLogIns("New log in from ", req, foundUser); //no need for sync work
         // res.cookie('jwt', refreshToken, {httpOnly : true, sameSite : "None", maxAge : 1000*60*60*24});
         res.cookie('jwt', refreshToken, {httpOnly : true, secure :true, sameSite : "None", maxAge : 1000*60*60*24});
-        const account = {
-            username : foundUser.username, 
-            email : foundUser.email, 
-            id : foundUser._id
-          }
-        return res.json({accessToken, account : account});
+        return res.json({accessToken});
     }
     else {
         await lockAccount(foundUser);

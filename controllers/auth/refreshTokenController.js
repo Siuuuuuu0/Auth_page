@@ -14,10 +14,11 @@ const handleRefreshToken = async(req, res)=>{
                 {'Info' : { 
                     'email' : decoded.email, 
                     'username' : foundUser.username,
-                    'roles' : Object.values(foundUser.roles)
+                    'roles' : Object.values(foundUser.roles), 
+                    'id' : foundUser._id
                 } }, 
                 process.env.ACCESS_TOKEN_SECRET, 
-                {expiresIn : '30s'}
+                {expiresIn : '15m'}
             ); 
             res.json({accessToken}); 
         }
