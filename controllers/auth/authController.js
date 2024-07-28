@@ -3,7 +3,7 @@ const bcrypt = require('bcrypt');
 const {mailCode} = require('../../utilities/2FA');
 const handleAuth = async(req, res)=>{
     const {userOrMail, password} = req.body; 
-    const regex = /[a-zA-Z0-9]+$/;
+    const regex = /^[A-Za-z0-9!#$%^&*_\-.]{3,20}$/;
     const isUsername = regex.test(userOrMail);
     const foundUser = await User.findOne(isUsername?{username : userOrMail}:{email : userOrMail}).exec();
     if(!foundUser) return res.status(404).json({'message' : 'no such user'});

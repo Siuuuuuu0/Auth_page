@@ -4,7 +4,7 @@ const {suspiciousEmail} = require('../utilities/2FA');
 const verifyForLocation = async(req, res, next)=>{
     if(!req.body.userOrMail) return res.status(400).json({'message' : 'no credential provided'}); 
     const userOrMail = req.body.userOrMail
-    const regex = /[a-zA-Z0-9]+$/;
+    const regex = /^[A-Za-z0-9!#$%^&*_\-.]{3,20}$/;
     const isUsername = regex.test(userOrMail);
     const foundUser = await User.findOne(isUsername?{username : userOrMail}:{email : userOrMail}).exec(); 
     if(!foundUser) return next();

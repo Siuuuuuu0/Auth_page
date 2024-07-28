@@ -45,6 +45,14 @@ const userSchema = new Schema({
         type : String, 
         default : undefined, 
         sparse : true
+    }, 
+    firstName : {
+        type : String, 
+        required : true
+    },
+    lastName : {
+        type : String, 
+        required : true
     }
 }); 
 module.exports = mongoose.model("User", userSchema); 

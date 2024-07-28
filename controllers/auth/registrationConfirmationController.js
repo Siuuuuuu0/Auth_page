@@ -7,7 +7,7 @@ const handleConfirmation = async(req, res)=>{
 }
 
 const handleComplete = async(req, res) =>{
-    const {password, email, username, googleId } = req.body; 
+    const {password, email, username, googleId, firstName, lastName } = req.body; 
     if(!password||!email) return res.status(400).json({'message' : 'password and email required'});
     if(username) {
         const duplicateUsername = await User.findOne({username}).exec();
@@ -18,6 +18,8 @@ const handleComplete = async(req, res) =>{
         const result = await User.create({
         password :hashedPwd, 
         email :email, 
+        firstName : firstName, 
+        lastName : lastName,
         username : username?username:email //if username exists then username, else the email
         });
         if (googleId) result.googleId = googleId
