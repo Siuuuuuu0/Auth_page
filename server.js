@@ -14,6 +14,9 @@ const cookieParser = require('cookie-parser');
 const path = require('path'); 
 const cors = require('cors');  
 const mongoose = require('mongoose'); 
+const multer = require('multer')
+const storage = multer.memoryStorage() // Store files in memory instead of on disk
+const upload = multer({ storage: storage })
 // const helmet = require('helmet');
 // const passport = require('./controllers/auth/googleAuthController'); 
 
@@ -54,6 +57,7 @@ app.use(verifyJWT);
 app.use('/update', require('./routes/apis/account/update'));
 app.use('/users', require('./routes/apis/users/users')); 
 app.use('/root', require('./routes/root'));
+app.use('/account', upload.single('profilePicture'), require('./routes/apis/account/account'));
 
 // 404 Handler
 app.all('/*', (req, res) => {

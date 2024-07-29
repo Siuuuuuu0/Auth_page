@@ -47,7 +47,7 @@ const handleComplete = async(req, res) =>{
         recordLogIns("First log in from ", req, result);
         // return res.status(201).json({'message' : `User ${result} has been created`});
         res.cookie('jwt', refreshToken, {httpOnly : true, secure :true, sameSite : "None", maxAge : 1000*60*60*24});
-        return res.json({accessToken});
+        return res.json({accessToken, id:result._id});
         
     }
     catch(err){
