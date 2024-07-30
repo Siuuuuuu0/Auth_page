@@ -1,10 +1,13 @@
 const User = require('../../model/User');
 const bcrypt = require('bcrypt'); 
+const UserProfilePicture = require('../../model/UserProfilePicture');
 const deleteUser= async(req, res)=>{
     if(!req?.body?.id) return res.status(400).json({'message' : 'id required'});
     const foundUser = await User.findOne({_id : req.body.id}).exec(); 
     if(!foundUser) return res.status(204).json({'message' : 'no such user'});
     await User.deleteOne({_id : req.body.id});
+    if(req.body.profilePictureId)
+        UserProfilePicture.deleteOne({_id : req.body.profileId})
     res.status(200).json({message : 'Deleted successfully'});
 }; 
 const updateUser = async (req, res) => {

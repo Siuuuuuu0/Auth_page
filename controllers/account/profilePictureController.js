@@ -57,18 +57,20 @@ const handleProfilePictureUpload = async (req, res) => {
                 }
 
                 try {
+                    console.log(data)
                     const result = await UserProfilePicture.create({
                         userId : userId, 
                         Key : data.Key, 
                     })
-                    const base64Image = data.Body.toString('base64');
-                    const contentType = data.ContentType;
+
+                    const base64Image = compressedBuffer.toString('base64');
+                    const contentType = req.file.mimetype;
                     const response = {
                         id: result._id,
                         image: `data:${contentType};base64,${base64Image}`
                     };
             
-                    res.status(200).json(response);
+                    return res.status(200).json(response);
 
                 }catch (dbErr) {
                     console.error('Error saving to database:', dbErr);
@@ -164,14 +166,14 @@ const handleProfilePictureChange = async (req, res) => {
             try {
                 foundUser.Key = data.Key; 
                 await foundUser.save()
-                const base64Image = data.Body.toString('base64');
-                const contentType = data.ContentType;
+                const base64Image = compressedBuffer.toString('base64');
+                const contentType = req.file.mimetype;
                 const response = {
                     id: foundUser._id,
                     image: `data:${contentType};base64,${base64Image}`
                 };
         
-                res.status(200).json(response);
+                return res.status(200).json(response);
 
             }catch (dbErr) {
                 console.error('Error saving to database:', dbErr);
@@ -188,9 +190,9 @@ const handleProfilePictureChange = async (req, res) => {
 
 const handleProfilePictureDeletion = async (req, res) => {
     try {
-
-        const schemaId = req.body.id;
-        const foundUser = await UserProfilePicture.findOne({_id : schemaId}).exec()
+        
+        const schemaId = req.body.id ?? req.body.userId;
+        const foundUser = await UserProfilePicture.findOne(req.body.id ? {_id : schemaId} : {userId : schemaId}).exec();
 
         if (!foundUser) {
             return res.status(404).json({ message: 'User\'s profile picture not found' });
