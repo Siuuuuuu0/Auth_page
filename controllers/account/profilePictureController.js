@@ -220,7 +220,7 @@ const handleGetProfilePicture = async (req, res) => {
         const foundUser = await UserProfilePicture.findOne({ userId }).exec();
 
         if (!foundUser) {
-            return res.status(404).json({ message: 'Profile picture not found' });
+            return res.status(204).json({ message: 'No profile picture for this user' });
         }
 
         const params = {
